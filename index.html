@@ -1,35 +1,59 @@
 <!doctype html>
-<html lang="en" ng-app="LunchCheck">
+<html lang="en" ng-app="ShoppingListCheckOff">
   <head>
-    <meta charset="utf-8">
-    <title>Lunch Checker</title>
+    <title>Shopping List Check Off</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <style>
-      .message { font-size: 1.3em; font-weight: bold; }
-      .green { color: #393; border: 1px solid #393; padding: 10px; border-radius: 5px; }
-      .red { color: #e11; border: 1px solid #e11; padding: 10px; border-radius: 5px; }
+      .emptyMessage {
+        font-weight: bold;
+        color: red;
+        font-size: 1.2em;
+      }
+      li {
+        margin-bottom: 7px;
+        font-size: 1.2em;
+      }
+      li > button {
+        margin-left: 6px;
+      }
+      button > span {
+        color: green;
+      }
     </style>
   </head>
 <body>
-  <div class="container" ng-controller="LunchCheckController">
-    <h1>Lunch Checker</h1>
-    <div class="form-group">
-      <input id="lunch-menu" type="text"
-      placeholder="list comma separated dishes you usually have for lunch"
-      class="form-control" ng-model="lunch_menu">
-      <p>* we are not consider empty items</p>
+  <div class="container">
+  <h1>Shopping List Check Off</h1>
+
+  <div class="row">
+
+    <!-- To Buy List -->
+    <div class="col-md-6" ng-controller="ToBuyShoppingController as listToBuy">
+     <h2>To Buy:</h2>
+     <ul>
+        <li ng-repeat="item in listToBuy.items">
+          Buy {{ item.quantity }} of {{ item.name }}
+          <button ng-click="listToBuy.buyItem($index);" 
+              class="btn btn-default"><span class="glyphicon glyphicon-ok"></span> Bought</button>
+        </li>
+     </ul>
+     <div ng-if="!listToBuy.items.length" class="emptyMessage">Everything is bought!</div>
     </div>
-    <div class="form-group">
-       <button class="btn btn-default" ng-click="check();">Check If Too Much</button>
-    </div>
-    <div class="form-group message" ng-model="message">
-      <span  class="{{message.color}}">
-        {{message.text}}
-      </span>
+
+    <!-- Already Bought List -->
+    <div class="col-md-6" ng-controller="AlreadyBoughtShoppingController as listBought">
+     <h2>Already Bought:</h2>
+     <ul>
+        <li ng-repeat="item in listBought.items">
+          Bought {{ item.quantity }} of {{ item.name }}
+        </li>
+     </ul>
+     <div ng-if="!listBought.items.length" class="emptyMessage">Nothing bought yet.</div>
     </div>
   </div>
-  <script src="angular.min.js"></script>
-  <script src="app.js"></script>
+</div>
+<script src="angular.min.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
